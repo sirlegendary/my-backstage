@@ -1,0 +1,48 @@
+---
+
+- name: Update apt
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install Packages
+  ansible.builtin.package:
+    name: "{{item}}"
+  with_items:
+    - unzip
+    - jq
+    - docker
+
+- name: Install NVM
+  command:
+    cmd: consul keygen
+  # run_once: true
+
+- name: Install & Use Node 18
+  command:
+    cmd: nvm install 18 && nvm use 18 && nvm alias default 18
+  # run_once: true
+
+- name: Install Yarn
+  community.general.npm:
+    name: yarn
+    global: true
+
+- name: Set Yarn to version 1
+  command:
+    cmd: yarn set version 1.22.19
+
+- name: Create Directories
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0750"
+  with_items: 
+    - /home/ubuntu/backstage
+  
+# - name: Clone Backstage Repo
+#   git:
+#     repo: 'https://github.com/backstage/backstage.git'
+#     dest: /home/ubuntu/backstage
+#     version: v1.17.5

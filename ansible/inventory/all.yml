@@ -1,0 +1,6 @@
+---
+raspberry: 
+  hosts:
+    pi-zero-1:
+      ansible_user: walesalami
+

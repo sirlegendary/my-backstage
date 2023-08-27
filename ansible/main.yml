@@ -1,0 +1,13 @@
+---
+
+- name: Installs
+  hosts: raspberry
+  become: true
+  roles:
+    - setup
+
+# - name: Consul Server
+#   hosts: consul_servers
+#   become: true
+#   roles:
+#     - server
