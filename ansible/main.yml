@@ -1,13 +1,13 @@
 ---
 
 - name: Installs
-  hosts: raspberry
+  hosts: aws_ec2
   become: true
   roles:
     - setup
 
-# - name: Consul Server
-#   hosts: consul_servers
+# - name: Create Backstage application
+#   hosts: aws_ec2
 #   become: true
 #   roles:
-#     - server
+#     - create_application

@@ -1,0 +1,11 @@
+---
+
+- name: Create Application
+  become: false
+  shell: |
+    npx @backstage/create-app@latest legendary-backstage
+  # responses:
+  #   Enter a name for the app [required] (backstage) legendary-backstage
+  args:
+    executable: /bin/bash
+    chdir: "$HOME/backstage"

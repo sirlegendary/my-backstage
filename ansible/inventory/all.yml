@@ -4,3 +4,8 @@ raspberry:
     pi-zero-1:
       ansible_user: walesalami
 
+aws_ec2:
+  hosts:
+    18.130.24.164:
+      ansible_user: ubuntu
+

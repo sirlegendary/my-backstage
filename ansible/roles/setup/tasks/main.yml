@@ -1,8 +1,31 @@
 ---
 
-- name: Update apt
-  ansible.builtin.apt:
+# - name: Update all packages to their latest version
+#   ansible.builtin.apt:
+#     name: "*"
+#     state: latest
+
+- name: Add GPG apt Key
+  apt_key:
+    url: "{{item}}"
+    state: present
+  with_items: 
+    - https://download.docker.com/linux/ubuntu/gpg
+    - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+- name: Add Repository
+  apt_repository:
+    repo: "{{item}}"
+    state: present
+  with_items: 
+    - deb https://download.docker.com/linux/ubuntu bionic stable
+    - deb https://deb.nodesource.com/node_18.x {{ ansible_distribution_release }} main
+
+- name: Update apt and install docker-ce
+  apt:
     update_cache: true
+    name: docker-ce 
+    state: latest
 
 - name: Install Packages
   ansible.builtin.package:
@@ -10,26 +33,37 @@
   with_items:
     - unzip
     - jq
-    - docker
+    - ca-certificates  
+    - gnupg
+    - docker-ce-cli 
+    - containerd.io
+    - nodejs
+    - g++ 
+    - build-essential
 
 - name: Install NVM
-  command:
-    cmd: consul keygen
-  # run_once: true
+  become: false
+  shell: |
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+  args:
+    executable: /bin/bash
+    chdir: "$HOME"
+    creates: "$HOME/.nvm/nvm.sh"
 
-- name: Install & Use Node 18
-  command:
-    cmd: nvm install 18 && nvm use 18 && nvm alias default 18
-  # run_once: true
+- name: Reload .Bashrc file
+  shell: source ~/.bashrc 
+  args:
+    executable: /bin/bash
+
+- name: Update NPM
+  shell: npm install -g npm@9.8.1
 
 - name: Install Yarn
-  community.general.npm:
-    name: yarn
-    global: true
-
-- name: Set Yarn to version 1
-  command:
-    cmd: yarn set version 1.22.19
+  shell: |
+    npm install --global yarn && yarn set version 1.22.19 && yarn --version
+  args:
+    executable: /bin/bash
+    chdir: "$HOME"
 
 - name: Create Directories
   file:
@@ -41,8 +75,9 @@
   with_items: 
     - /home/ubuntu/backstage
   
-# - name: Clone Backstage Repo
-#   git:
-#     repo: 'https://github.com/backstage/backstage.git'
-#     dest: /home/ubuntu/backstage
-#     version: v1.17.5
+- name: Clone Backstage Repo
+  git:
+    repo: 'https://github.com/backstage/backstage.git'
+    dest: /home/ubuntu/backstage
+    depth: 1
+    version: v1.17.5
