@@ -1,13 +1,14 @@
 ---
 
-- name: Installs
-  hosts: aws_ec2
-  become: true
-  roles:
-    - setup
+# - name: Installs
+#   hosts: aws_ec2
+#   become: true
+#   roles:
+#     - setup
 
 - name: Create Backstage application
   hosts: aws_ec2
   become: true
   roles:
-    - create_application
+    # - create_application
+    - create_k8s_cluster

@@ -41,6 +41,11 @@
     - g++ 
     - build-essential
 
+- name: Install "Go" with option --classic
+  community.general.snap:
+    name: go
+    classic: true
+
 # - name: Install NVM
 #   become: false
 #   shell: |

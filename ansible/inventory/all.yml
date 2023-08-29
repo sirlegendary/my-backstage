@@ -6,6 +6,6 @@ raspberry:
 
 aws_ec2:
   hosts:
-    52.56.98.109:
+    3.10.190.145:
       ansible_user: ubuntu
 

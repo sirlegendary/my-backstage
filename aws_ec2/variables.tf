@@ -9,7 +9,7 @@ variable "application_name" {
 
 variable "instancetype" {
   description = "EC2 instance type"
-  default     = "t2.small" #"t2.micro" "t2.medium" "t2.small"
+  default     = "t2.medium" #"t2.micro" "t2.medium" "t2.small"
 }
 
 variable "application_vpc_block" {

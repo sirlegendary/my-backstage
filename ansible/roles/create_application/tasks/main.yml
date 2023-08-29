@@ -8,10 +8,11 @@
     timeout: 800
     responses:
       (.*)Ok to proceed(.*): "y"
-      (.*)Enter a name for the app(.*): "sir-legendary-backstage"
+      (.*)Enter a name for the app(.*): "legendary-backstage"
+    creates: /home/ubuntu/legendary-backstage
 
 - name: Add custom app config
   become: false
   template:
     src: app-config-local.yml.j2
-    dest: /home/ubuntu/sir-legendary-backstage/app-config.local.yaml
+    dest: /home/ubuntu/legendary-backstage/app-config.local.yaml
