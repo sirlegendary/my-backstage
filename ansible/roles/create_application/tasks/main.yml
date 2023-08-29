@@ -2,10 +2,16 @@
 
 - name: Create Application
   become: false
-  shell: |
-    npx @backstage/create-app@latest legendary-backstage
-  # responses:
-  #   Enter a name for the app [required] (backstage) legendary-backstage
-  args:
-    executable: /bin/bash
-    chdir: "$HOME/backstage"
+  expect:
+    echo: yes
+    command: npx @backstage/create-app@latest 
+    timeout: 800
+    responses:
+      (.*)Ok to proceed(.*): "y"
+      (.*)Enter a name for the app(.*): "sir-legendary-backstage"
+
+- name: Add custom app config
+  become: false
+  template:
+    src: app-config-local.yml.j2
+    dest: /home/ubuntu/sir-legendary-backstage/app-config.local.yaml

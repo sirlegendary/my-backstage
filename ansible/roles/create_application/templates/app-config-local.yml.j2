@@ -1,0 +1,26 @@
+app:
+  title: The legendary Backstage App
+  baseUrl: http://{{ ansible_hostname|replace('ip-', '')|replace('-', '.') }}:3000
+
+organization:
+  name: Sirlegendary
+
+backend:
+  baseUrl: http://{{ ansible_hostname|replace('ip-', '')|replace('-', '.') }}:7007
+  listen:
+    port: 7007
+    # Uncomment the following host directive to bind to specific interfaces
+    # host: {{ ansible_hostname|replace('ip-', '')|replace('-', '.') }}
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin: http://{{ ansible_hostname|replace('ip-', '')|replace('-', '.') }}:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}

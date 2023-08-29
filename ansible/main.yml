@@ -6,8 +6,8 @@
   roles:
     - setup
 
-# - name: Create Backstage application
-#   hosts: aws_ec2
-#   become: true
-#   roles:
-#     - create_application
+- name: Create Backstage application
+  hosts: aws_ec2
+  become: true
+  roles:
+    - create_application

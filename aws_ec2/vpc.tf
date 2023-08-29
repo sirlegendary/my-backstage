@@ -41,6 +41,20 @@ resource "aws_security_group" "vpnsecuritygroup" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 7007
+    to_port     = 7007
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # engress {
+  #   from_port   = 3600
+  #   to_port     = 3600
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+
   egress {
     from_port   = 0
     to_port     = 0

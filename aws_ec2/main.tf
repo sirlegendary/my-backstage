@@ -20,8 +20,9 @@ resource "aws_key_pair" "deployer" {
 }
 
 resource "aws_instance" "backstage_vm" {
-  ami           = data.aws_ami.latest-ubuntu.id
-  instance_type = var.instancetype
+  count                       = var.instance_count
+  ami                         = data.aws_ami.latest-ubuntu.id
+  instance_type               = var.instancetype
   key_name                    = aws_key_pair.deployer.key_name
   vpc_security_group_ids      = [aws_security_group.vpnsecuritygroup.id]
   subnet_id                   = module.vpc.application_public_subnets[0]
@@ -39,5 +40,5 @@ resource "aws_instance" "backstage_vm" {
 
 // Instance Pupblic IPv4
 output "ssh_login" {
-  value = "ssh ubuntu@${aws_instance.backstage_vm.public_ip}"
+  value = aws_instance.backstage_vm[*].public_ip
 }

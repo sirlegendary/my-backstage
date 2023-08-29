@@ -1,9 +1,9 @@
 ---
 
-# - name: Update all packages to their latest version
-#   ansible.builtin.apt:
-#     name: "*"
-#     state: latest
+- name: Update all packages to their latest version
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
 
 - name: Add GPG apt Key
   apt_key:
@@ -41,26 +41,22 @@
     - g++ 
     - build-essential
 
-- name: Install NVM
-  become: false
-  shell: |
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
-  args:
-    executable: /bin/bash
-    chdir: "$HOME"
-    creates: "$HOME/.nvm/nvm.sh"
-
-- name: Reload .Bashrc file
-  shell: source ~/.bashrc 
-  args:
-    executable: /bin/bash
+# - name: Install NVM
+#   become: false
+#   shell: |
+#     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash
+#   args:
+#     executable: /bin/bash
+#     chdir: "$HOME"
+#     creates: "$HOME/.nvm/nvm.sh"
 
 - name: Update NPM
   shell: npm install -g npm@9.8.1
 
 - name: Install Yarn
   shell: |
-    npm install --global yarn && yarn set version 1.22.19 && yarn --version
+    npm install --global yarn
+    yarn set version 1.22.19  
   args:
     executable: /bin/bash
     chdir: "$HOME"

@@ -23,3 +23,7 @@ variable "application_public_subnets_ip_lists" {
 variable "application_private_subnets_ip_lists" {
   default = ["10.45.64.0/20", "10.45.80.0/20", "10.45.96.0/20"]
 }
+
+variable "instance_count" {
+  default = 1
+}
