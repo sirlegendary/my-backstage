@@ -1,16 +1,27 @@
 ---
 
+- name: Create Application
+  become: false
+  expect:
+    echo: yes
+    command: npx @backstage/create-app@latest 
+    timeout: 800
+    responses:
+      (.*)Ok to proceed(.*): "y"
+      (.*)Enter a name for the app(.*): "sir-legendary-backstage"
+    creates: /home/ubuntu/sir-legendary-backstage
+
 - name: Add custom app config
   become: false
   template:
     src: app-config-local.yml.j2
-    dest: /home/ubuntu/legendary-backstage/app-config.local.yaml
+    dest: /home/ubuntu/sir-legendary-backstage/app-config.yaml
 
 - name: Add custom Dockerfile
   become: false
   template:
     src: dockerfile.j2
-    dest: /home/ubuntu/legendary-backstage/packages/backend/Dockerfile
+    dest: /home/ubuntu/sir-legendary-backstage/packages/backend/Dockerfile
 
 - name: Host build
   become: false
@@ -19,18 +30,16 @@
     yarn tsc
     yarn build:backend
   args:
-    chdir: "/home/ubuntu/legendary-backstage"
+    chdir: "/home/ubuntu/sir-legendary-backstage"
 
 - name: Clear Docker images and running containers
   shell: |
-    docker stop $(docker ps -aq)
-    docker rm $(docker ps -aq)
-    docker rmi $(docker images -aq)
-  # args:
-  #   chdir: "/home/ubuntu/legendary-backstage"
+    ./docker_clear.sh
+  args:
+    chdir: "/home/ubuntu/"
 
 - name: Build Docker image
   shell: |
     docker image build . -f packages/backend/Dockerfile --tag backstage
   args:
-    chdir: "/home/ubuntu/legendary-backstage"
+    chdir: "/home/ubuntu/sir-legendary-backstage"
