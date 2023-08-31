@@ -1,5 +1,36 @@
-# - name: Add custom Dockerfile
-#   become: false
-#   template:
-#     src: dockerfile.j2
-#     dest: /home/ubuntu/legendary-backstage/packages/backend/Dockerfile
+---
+
+- name: Add custom app config
+  become: false
+  template:
+    src: app-config-local.yml.j2
+    dest: /home/ubuntu/legendary-backstage/app-config.local.yaml
+
+- name: Add custom Dockerfile
+  become: false
+  template:
+    src: dockerfile.j2
+    dest: /home/ubuntu/legendary-backstage/packages/backend/Dockerfile
+
+- name: Host build
+  become: false
+  shell: |
+    yarn install --frozen-lockfile
+    yarn tsc
+    yarn build:backend
+  args:
+    chdir: "/home/ubuntu/legendary-backstage"
+
+- name: Clear Docker images and running containers
+  shell: |
+    docker stop $(docker ps -aq)
+    docker rm $(docker ps -aq)
+    docker rmi $(docker images -aq)
+  # args:
+  #   chdir: "/home/ubuntu/legendary-backstage"
+
+- name: Build Docker image
+  shell: |
+    docker image build . -f packages/backend/Dockerfile --tag backstage
+  args:
+    chdir: "/home/ubuntu/legendary-backstage"

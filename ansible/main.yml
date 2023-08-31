@@ -11,4 +11,5 @@
   become: true
   roles:
     # - create_application
-    - create_k8s_cluster
+    # - create_k8s_cluster
+    - build_image

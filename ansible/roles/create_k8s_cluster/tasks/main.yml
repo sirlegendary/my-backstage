@@ -5,20 +5,33 @@
   shell: |
     go install sigs.k8s.io/kind@v0.20.0
 
-- name: add Go to path
-  lineinfile:
-    dest: /etc/environment
-    state: present
-    backrefs: yes
-    regexp: 'PATH=(["]*)((?!.*?/home/ubuntu/go/bin).*?)(["]*)$'
-    line: 'PATH=\1\2:/home/ubuntu/go/bin\3'
+# - name: add Go to path
+#   lineinfile:
+#     dest: /etc/environment
+#     state: present
+#     backrefs: yes
+#     regexp: 'PATH=(["]*)((?!.*?/home/ubuntu/go/bin).*?)(["]*)$'
+#     line: 'PATH=\1\2:/home/ubuntu/go/bin\3'
 
-- name: Reload /etc/environment file
-  shell: source /etc/environment 
-  args:
-    executable: /bin/bash
+# - name: Set path in profile
+#   lineinfile:
+#   dest: /etc/profile
+#   insertafter: EOF
+#   line: "PATH=$PATH:/home/ubuntu/go/bin"
+
+# - name: Reload /etc/profile file
+#   shell: source /etc/profile
+#   args:
+#     executable: /bin/bash
 
 # - name: Install kubeadm, kubelet, and kubectl
 #   apt:
 #     name: ['kubelet','kubeadm','kubectl']
 #     state: present
+
+- name: Create Kind Cluster
+  shell: |
+    /home/ubuntu/go/bin/kind create cluster --name kind-cluster
+  # args:
+  #   executable: /home/ubuntu/go/bin/kind
+

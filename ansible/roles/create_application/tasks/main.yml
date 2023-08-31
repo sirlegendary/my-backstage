@@ -10,9 +10,3 @@
       (.*)Ok to proceed(.*): "y"
       (.*)Enter a name for the app(.*): "legendary-backstage"
     creates: /home/ubuntu/legendary-backstage
-
-- name: Add custom app config
-  become: false
-  template:
-    src: app-config-local.yml.j2
-    dest: /home/ubuntu/legendary-backstage/app-config.local.yaml

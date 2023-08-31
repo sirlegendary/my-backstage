@@ -12,6 +12,7 @@
   with_items: 
     - https://download.docker.com/linux/ubuntu/gpg
     - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    - https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
 - name: Add Repository
   apt_repository:
@@ -20,6 +21,7 @@
   with_items: 
     - deb https://download.docker.com/linux/ubuntu bionic stable
     - deb https://deb.nodesource.com/node_18.x {{ ansible_distribution_release }} main
+    - deb https://apt.kubernetes.io/ kubernetes-xenial main
 
 - name: Update apt and install docker-ce
   apt:
@@ -40,6 +42,9 @@
     - nodejs
     - g++ 
     - build-essential
+    - kubelet 
+    - kubeadm 
+    - kubectl
 
 - name: Install "Go" with option --classic
   community.general.snap:
