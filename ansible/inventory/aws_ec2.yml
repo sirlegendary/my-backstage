@@ -1,0 +1,13 @@
+---
+plugin: amazon.aws.aws_ec2
+regions:
+  - eu-west-2
+filters:
+  # instance-state-name : running
+  tag:Name: "backstage"
+hostnames:
+  # This option allows displaying the public ip addresses.
+  - ip-address
+compose:
+  ansible_host: public_ip_address
+

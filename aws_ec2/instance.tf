@@ -30,7 +30,7 @@ resource "aws_instance" "backstage_vm" {
 
   ebs_block_device {
     device_name = "/dev/sda1"
-    volume_size = 30
+    volume_size = 50
   }
 
   tags = {
@@ -38,7 +38,3 @@ resource "aws_instance" "backstage_vm" {
   }
 }
 
-// Instance Pupblic IPv4
-output "ssh_login" {
-  value = aws_instance.backstage_vm[*].public_ip
-}

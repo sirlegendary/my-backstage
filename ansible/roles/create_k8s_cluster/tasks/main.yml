@@ -1,37 +1,55 @@
 ---
 
 - name: Install Kind
-  become: false
   shell: |
     go install sigs.k8s.io/kind@v0.20.0
+
+# - name: Copy to 
+#   copy:
+#     dest: /etc/profile.d/kind.sh
+#     content: "PATH=$PATH:/root/go/bin"
 
 # - name: add Go to path
 #   lineinfile:
 #     dest: /etc/environment
 #     state: present
 #     backrefs: yes
-#     regexp: 'PATH=(["]*)((?!.*?/home/ubuntu/go/bin).*?)(["]*)$'
-#     line: 'PATH=\1\2:/home/ubuntu/go/bin\3'
+#     regexp: 'PATH=(["]*)((?!.*?/root/go/bin).*?)(["]*)$'
+#     line: 'PATH=\1\2:/root/go/bin\3'
 
 # - name: Set path in profile
 #   lineinfile:
-#   dest: /etc/profile
-#   insertafter: EOF
-#   line: "PATH=$PATH:/home/ubuntu/go/bin"
+#     dest: /root/.bashrc
+#     insertafter: EOF
+#     line: "PATH=$PATH:/root/go/bin"
 
-# - name: Reload /etc/profile file
-#   shell: source /etc/profile
+# - name: Reload /root/.bashrc file
+#   shell: source /root/.bashrc
 #   args:
 #     executable: /bin/bash
 
-# - name: Install kubeadm, kubelet, and kubectl
-#   apt:
-#     name: ['kubelet','kubeadm','kubectl']
-#     state: present
+- name: Create kubernetes Directories
+  file:
+    path: "{{item}}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0750"
+  with_items: 
+    - /home/ubuntu/cluster-yamls
+
+- name: Add custom app config
+  become: false
+  template:
+    # kind_multi_node_cluster.yml.j2  # kind_single_node_cluster.yml.j2
+    src: kind_single_node_cluster.yml.j2
+    dest: /home/ubuntu/cluster-yamls/kind-single-node-config.yaml
 
 - name: Create Kind Cluster
   shell: |
-    /home/ubuntu/go/bin/kind create cluster --name kind-cluster
-  # args:
-  #   executable: /home/ubuntu/go/bin/kind
+    /root/go/bin/kind create cluster --config /home/ubuntu/cluster-yamls/kind-single-node-config.yaml
+
+- name: Load backstage image into kind
+  shell: |
+    /root/go/bin/kind load docker-image backstage:1.0.0 
 

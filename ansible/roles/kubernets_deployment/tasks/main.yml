@@ -1,0 +1,15 @@
+---
+
+# - name: Load docker image into kind
+#   shell: |
+#     /home/ubuntu/go/bin/kind load docker-image backstage 
+#   # args:
+#   #   executable: /bin/bash
+
+- name: Create a k8s namespace
+  k8s:
+    name: backstage
+    kind: Namespace
+    state: present
+
+# kubectl create ns backstage

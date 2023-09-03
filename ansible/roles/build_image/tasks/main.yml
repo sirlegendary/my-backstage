@@ -1,16 +1,5 @@
 ---
 
-- name: Create Application
-  become: false
-  expect:
-    echo: yes
-    command: npx @backstage/create-app@latest 
-    timeout: 800
-    responses:
-      (.*)Ok to proceed(.*): "y"
-      (.*)Enter a name for the app(.*): "sir-legendary-backstage"
-    creates: /home/ubuntu/sir-legendary-backstage
-
 - name: Add custom app config
   become: false
   template:
@@ -32,14 +21,22 @@
   args:
     chdir: "/home/ubuntu/sir-legendary-backstage"
 
+- name: Add Docker Clear script
+  become: false
+  template:
+    src: docker_clear.sh.j2
+    dest: /home/ubuntu/docker_clear.sh
+    mode: u+rwx,g=rwx,o=r
+
 - name: Clear Docker images and running containers
   shell: |
     ./docker_clear.sh
   args:
     chdir: "/home/ubuntu/"
+  ignore_errors: true
 
 - name: Build Docker image
   shell: |
-    docker image build . -f packages/backend/Dockerfile --tag backstage
+    docker image build . -f packages/backend/Dockerfile --tag backstage:1.0.0
   args:
     chdir: "/home/ubuntu/sir-legendary-backstage"

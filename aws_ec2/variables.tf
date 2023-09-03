@@ -25,5 +25,5 @@ variable "application_private_subnets_ip_lists" {
 }
 
 variable "instance_count" {
-  default = 1
+  default = 0
 }

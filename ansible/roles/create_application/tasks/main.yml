@@ -5,8 +5,8 @@
   expect:
     echo: yes
     command: npx @backstage/create-app@latest 
-    timeout: 800
+    timeout: 1800 # 30mins
     responses:
       (.*)Ok to proceed(.*): "y"
-      (.*)Enter a name for the app(.*): "legendary-backstage"
-    creates: /home/ubuntu/legendary-backstage
+      (.*)Enter a name for the app(.*): "sir-legendary-backstage"
+    creates: /home/ubuntu/sir-legendary-backstage
